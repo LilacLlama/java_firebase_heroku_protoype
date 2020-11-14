@@ -61,3 +61,4 @@ build/
 ### Secrets ###
 *firebase*.json
 .env
+secrets/
