@@ -67,11 +67,38 @@
     </nav>
 
     <main class="container">
-      <div class="bg-light p-5 rounded">
-        <h1>Data example</h1>
-        <ol>
-          <li th:each="dataItem, iStat : ${dataList}" th:text="${dataItem}"></li>
-        </ol>
+      <h1>Todos:</h1>
+      <div class="accordion" id="accordionExample">
+        <div class="card" th:each="dataItem, iStat : ${dataList}">
+          <div class="card-header" th:id="${'heading-'+dataItem.get('id')}" th:text="${dataItem.get('description')}">
+            <h2 class="mb-0">
+              <button
+                class="btn btn-link btn-block text-left"
+                type="button"
+                data-toggle="collapse"
+                th:data-target="${'#collapse-'+dataItem.get('id')}"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                th:text="${dataItem.get('decription')}"
+              ></button>
+            </h2>
+          </div>
+          <div
+            th:id="${'collapse-'+dataItem.get('id')}"
+            class="collapse show"
+            th:aria-labelledby="${'heading-'+dataItem.get('id')}"
+            data-parent="#accordionExample"
+          >
+            <div class="card-body">
+              <ul>
+                <li th:text="${'Priority:'+dataItem.get('priority')}"></li>
+                <li th:text="${'Desc:'+dataItem.get('description')}"></li>
+                <li th:text="${'Created:'+dataItem.get('created_date').toString()}"></li>
+                <li th:text="${'Due:'+dataItem.get('due_date').toString()}"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
