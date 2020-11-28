@@ -13,6 +13,7 @@
       integrity="sha384-CuOF+2SnTUfTwSZjCXf01h7uYhfOBuxIhGKPbfEJ3+FqH/s6cIFN9bGr1HmAg4fQ"
       crossorigin="anonymous"
     />
+    <script src="https://kit.fontawesome.com/174ac783c4.js" crossorigin="anonymous"></script>
 
     <style>
       .bd-placeholder-img {
@@ -32,74 +33,31 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Fixed navbar</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarCollapse"
-          aria-controls="navbarCollapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto mb-2 mb-md-0">
-            <li class="nav-item active">
-              <a class="nav-link" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
+    <nav th:replace="fragments/base.html :: navbar"></nav>
 
     <main class="container">
-      <h1>Todos:</h1>
-      <div class="accordion" id="accordionExample">
-        <div class="card" th:each="dataItem, iStat : ${dataList}">
-          <div class="card-header" th:id="${'heading-'+dataItem.get('id')}" th:text="${dataItem.get('description')}">
-            <h2 class="mb-0">
-              <button
-                class="btn btn-link btn-block text-left"
-                type="button"
-                data-toggle="collapse"
-                th:data-target="${'#collapse-'+dataItem.get('id')}"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-                th:text="${dataItem.get('decription')}"
-              ></button>
-            </h2>
-          </div>
-          <div
-            th:id="${'collapse-'+dataItem.get('id')}"
-            class="collapse show"
-            th:aria-labelledby="${'heading-'+dataItem.get('id')}"
-            data-parent="#accordionExample"
-          >
-            <div class="card-body">
-              <ul>
-                <li th:text="${'Priority:'+dataItem.get('priority')}"></li>
-                <li th:text="${'Desc:'+dataItem.get('description')}"></li>
-                <li th:text="${'Created:'+dataItem.get('created_date').toString()}"></li>
-                <li th:text="${'Due:'+dataItem.get('due_date').toString()}"></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col" th:each="colHeader: ${tableColumns}" th:text="${colHeader}"></th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="itemId: ${tableData.keySet()}" th:with="dataItem=${tableData.get(itemId)}">
+            <td th:text="${itemId}"></td>
+            <td th:each="key: ${dataItem.keySet()}" th:text="${dataItem.get(key)}"></td>
+            <td>
+              <a th:href="@{${editLink}(id=${itemId})}"><i class="far fa-edit"></i></a>
+            </td>
+            <td>
+              <a th:href="@{${deleteLink}(id=${itemId})}"><i class="far fa-trash-alt"></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </main>
 
     <div>

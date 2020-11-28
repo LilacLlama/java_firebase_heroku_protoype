@@ -2,10 +2,7 @@ package com.lilacllama.prototype.app;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
+import java.util.*;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -54,15 +51,21 @@ public class MainController {
         // query.get() blocks on response
         QuerySnapshot querySnapshot = query.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-        List<Map> dataList = new ArrayList<>();
+        Map tableData = new HashMap();
+        Set tableColumns = new HashSet();
+
         for (QueryDocumentSnapshot document : documents) {
             Map docData = document.getData();
-            docData.put("id", document.getId());
+            tableColumns.addAll(docData.keySet());
+            String docId = document.getId();
             System.out.println(docData.toString());
-            dataList.add(docData);
+            tableData.put(docId, docData);
         }
 
-        model.addAttribute("dataList", dataList);
+        model.addAttribute("tableData", tableData);
+        model.addAttribute("tableColumns", tableColumns);
+        model.addAttribute("editLink","/todo/edit");
+        model.addAttribute("deleteLink","/todo/delete");
         return "main";
     }
 
